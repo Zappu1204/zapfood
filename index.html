@@ -134,7 +134,10 @@
   </header><!-- End Header -->
 
   <!-- ======= Hero Section ======= -->
-  <section id="hero" class="hero d-flex align-items-center section-bg">
+  <section id="hero" class="hero d-flex align-items-center">
+    <video class="hero-video" autoplay muted loop>
+      <source src="assets/vid/3195650-uhd_2560_1440_25fps.mp4" type="video/mp4">
+    </video>
     <div class="container">
       <div class="row justify-content-between gy-5">
         <div
@@ -148,9 +151,9 @@
                 Video</span></a>
           </div>
         </div>
-        <div class="col-lg-5 order-1 order-lg-2 text-center text-lg-start">
+        <!-- <div class="col-lg-5 order-1 order-lg-2 text-center text-lg-start">
           <img src="assets/img/hero-img.png" class="img-fluid" alt="" data-aos="zoom-out" data-aos-delay="300">
-        </div>
+        </div> -->
       </div>
     </div>
   </section><!-- End Hero Section -->
@@ -220,7 +223,7 @@
               </ul>
               <p><strong>ZapFood - Ăn ngon chẳng cần lo nghĩ!</strong></p>
               <div class="text-center">
-                <a href="#" class="more-btn">Learn More <i class="bx bx-chevron-right"></i></a>
+                <a href="#" class="more-btn">Xem thêm<i class="bx bx-chevron-right"></i></a>
               </div>
             </div>
           </div><!-- End Why Box -->
@@ -302,6 +305,19 @@
 
       </div>
     </section><!-- End Stats Counter Section -->
+
+    <!-- ======= Video Background Section ======= -->
+    <section class="video-bg-section">
+      <video class="video-bg" autoplay muted loop>
+        <source src="assets/vid/3015488-hd_1920_1080_24fps.mp4" type="video/mp4">
+      </video>
+      <div class="video-overlay"></div>
+      <div class="video-content" data-aos="zoom-in">
+        <h2 class="neon-text">Trải Nghiệm Ẩm Thực Độc Đáo</h2>
+        <p class="neon-text-small">Nơi hương vị truyền thống gặp gỡ sáng tạo hiện đại</p>
+        <a href="#menu" class="video-btn">Khám Phá Thực Đơn</a>
+      </div>
+    </section><!-- End Video Background Section -->
 
     <!-- ======= Menu Section ======= -->
     <section id="menu" class="menu">
@@ -840,7 +856,7 @@
           <div class="col-lg-8 d-flex align-items-center reservation-form-bg">
             <!--            <form action="" method="post" role="form" class="php-email-form" data-aos="fade-up"-->
             <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up"
-              data-aos-delay="100">
+              data-aos-delay="100" data-recaptcha-site-key="6LfB_PUpAAAAAH1dqzLpQslayH2u8qQx1EbWxHuR">
               <div class="row gy-4">
                 <div class="col-lg-4 col-md-6">
                   <input type="text" name="name" class="form-control" id="customer-name" placeholder="Tên của bạn"
