@@ -16,7 +16,9 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.google.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Amatic+SC:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Amatic+SC:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -28,6 +30,9 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
 
+  <!-- Date Form -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
   <style>
     .form-check {
       display: flex;
@@ -35,40 +40,56 @@
       margin-left: 10px;
       margin-top: 10px;
     }
+
     input[type="checkbox"] {
       width: 15px;
       height: 15px;
     }
-    
+
     .form-check input[type="checkbox"] {
       margin-right: 10px;
     }
+
     .form-check label {
       margin-bottom: 0;
+    }
+    
+    /* Style cho Facebook Fanpage iframe */
+    .facebook-container {
+      overflow: hidden;
+      margin-top: 15px;
+      background: #FFF;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
   </style>
 
   <!-- Spam protection with Google reCaptcha -->
   <script src="https://www.google.com/recaptcha/api.js?render=6LfB_PUpAAAAAH1dqzLpQslayH2u8qQx1EbWxHuR"></script>
   <script>
-    grecaptcha.ready(function() {
-        document.getElementById('form_id').addEventListener('submit', function(event) {
-            // Prevent form from submitting
-            event.preventDefault();
- 
-            grecaptcha.execute('6LfB_PUpAAAAAH1dqzLpQslayH2u8qQx1EbWxHuR', {action: 'submit'}).then(function(token) {
-                // Add your token to the form
-                document.getElementById('g-recaptcha-response').value = token;
-                // Now submit the form
-                document.getElementById('form_id').submit();
-            });
+    grecaptcha.ready(function () {
+      document.getElementById('form_id').addEventListener('submit', function (event) {
+        // Prevent form from submitting
+        event.preventDefault();
+
+        grecaptcha.execute('6LfB_PUpAAAAAH1dqzLpQslayH2u8qQx1EbWxHuR', { action: 'submit' }).then(function (token) {
+          // Add your token to the form
+          document.getElementById('g-recaptcha-response').value = token;
+          // Now submit the form
+          document.getElementById('form_id').submit();
         });
+      });
     });
-    </script>
+  </script> 
 
 </head>
 
 <body>
+  <!-- Facebook SDK -->
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous" 
+    src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v22.0">
+  </script>
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -88,14 +109,16 @@
           <li><a href="#events">Sự kiện</a></li>
           <li><a href="#chefs">Đầu bếp</a></li>
           <li><a href="#gallery">Thư viện</a></li>
-          <li class="dropdown"><a href="#"><span>Đặt hàng</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+          <li class="dropdown"><a href="#"><span>Đặt hàng</span> <i
+                class="bi bi-chevron-down dropdown-indicator"></i></a>
             <ul>
               <li><a href="https://shopee.vn/">Đặt hàng trên Shoppe</a></li>
-              <li class="dropdown"><a href="#"><span>Lặn </span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+              <!-- <li class="dropdown"><a href="#"><span>Lặn </span> <i
+                    class="bi bi-chevron-down dropdown-indicator"></i></a>
                 <ul>
-                  <li><a href="#">Deep Drop Down 1</a></li>
+                  <li><a href="#"></a></li>
                 </ul>
-              </li>
+              </li> -->
               <li><a href="https://food.be.com.vn/">Đặt hàng trên Be Food</a></li>
             </ul>
           </li>
@@ -114,12 +137,15 @@
   <section id="hero" class="hero d-flex align-items-center section-bg">
     <div class="container">
       <div class="row justify-content-between gy-5">
-        <div class="col-lg-5 order-2 order-lg-1 d-flex flex-column justify-content-center align-items-center align-items-lg-start text-center text-lg-start">
-          <h2 data-aos="fade-up">Đồ ăn tốt cho sức khỏe<br>Ngon tỵt vời</h2>
-          <p data-aos="fade-up" data-aos-delay="100">Chọn đồ ăn đi a hi hi</p>
+        <div
+          class="col-lg-5 order-2 order-lg-1 d-flex flex-column justify-content-center align-items-center align-items-lg-start text-center text-lg-start">
+          <h2 data-aos="fade-up">Đồ ăn tốt cho sức khỏe<br>Ngon tuyệt vời</h2>
+          <p data-aos="fade-up" data-aos-delay="100">Hãy xem và lựa chọn đồ ăn ngay</p>
           <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
             <a href="#book-a-table" class="btn-book-a-table">Đặt bàn</a>
-            <a href="https://www.youtube.com/watch?v=LXb3EKWsInQ" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Xem Video</span></a>
+            <a href="https://www.youtube.com/watch?v=LXb3EKWsInQ"
+              class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Xem
+                Video</span></a>
           </div>
         </div>
         <div class="col-lg-5 order-1 order-lg-2 text-center text-lg-start">
@@ -141,7 +167,8 @@
         </div>
 
         <div class="row gy-4">
-          <div class="col-lg-7 position-relative about-img" style="background-image: url(assets/img/about.jpg) ;" data-aos="fade-up" data-aos-delay="150">
+          <div class="col-lg-7 position-relative about-img" style="background-image: url(assets/img/about.jpg) ;"
+            data-aos="fade-up" data-aos-delay="150">
             <div class="call-us position-absolute">
               <h4>Đặt bàn</h4>
               <p>+84 0963287236</p>
@@ -153,9 +180,17 @@
                 <strong>ZapFood - Sinh ra để bạn "ăn ngon" dễ dàng hơn!</strong>
               </p>
               <ul>
-                <li><i class="bi bi-check2-all"></i> ZapFood không phải là cái tên xuất hiện ngẫu nhiên. Đó là kết quả của những trăn trở về một giải pháp cho bữa ăn <strong>nhanh chóng, tiện lợi và ngon miệng</strong> trong cuộc sống bận rộn ngày nay. Từ chính nhu cầu của bản thân, đội ngũ sáng lập - những con người trẻ đầy nhiệt huyết - đã ấp ủ và kiến tạo nên ZapFood.</li>
-                <li><i class="bi bi-check2-all"></i> Chúng tôi mong muốn kết nối thực khách với hàng ngàn nhà hàng, quán ăn chất lượng, mang đến thực đơn đa dạng chỉ trong vài thao tác đơn giản trên website hoặc ứng dụng. ZapFood không ngừng nỗ lực hoàn thiện, từ việc hợp tác với các đối tác uy tín, đa dạng hóa món ăn đến việc cải tiến công nghệ, tối ưu trải nghiệm người dùng.</li>
-                <li><i class="bi bi-check2-all"></i> Hành trình của ZapFood còn dài và đầy thách thức, nhưng chúng tôi tin rằng với sự quyết tâm và nỗ lực không ngừng, ZapFood sẽ ngày càng khẳng định vị thế là nền tảng đặt món ăn trực tuyến hàng đầu, đồng hành cùng bạn trong mỗi bữa ăn.</li>
+                <li><i class="bi bi-check2-all"></i> ZapFood không phải là cái tên xuất hiện ngẫu nhiên. Đó là kết quả
+                  của những trăn trở về một giải pháp cho bữa ăn <strong>nhanh chóng, tiện lợi và ngon miệng</strong>
+                  trong cuộc sống bận rộn ngày nay. Từ chính nhu cầu của bản thân, đội ngũ sáng lập - những con người
+                  trẻ đầy nhiệt huyết - đã ấp ủ và kiến tạo nên ZapFood.</li>
+                <li><i class="bi bi-check2-all"></i> Chúng tôi mong muốn kết nối thực khách với hàng ngàn nhà hàng, quán
+                  ăn chất lượng, mang đến thực đơn đa dạng chỉ trong vài thao tác đơn giản trên website hoặc ứng dụng.
+                  ZapFood không ngừng nỗ lực hoàn thiện, từ việc hợp tác với các đối tác uy tín, đa dạng hóa món ăn đến
+                  việc cải tiến công nghệ, tối ưu trải nghiệm người dùng.</li>
+                <li><i class="bi bi-check2-all"></i> Hành trình của ZapFood còn dài và đầy thách thức, nhưng chúng tôi
+                  tin rằng với sự quyết tâm và nỗ lực không ngừng, ZapFood sẽ ngày càng khẳng định vị thế là nền tảng
+                  đặt món ăn trực tuyến hàng đầu, đồng hành cùng bạn trong mỗi bữa ăn.</li>
               </ul>
               <div class="position-relative mt-4">
                 <img src="assets/img/about-2.jpg" class="img-fluid" alt="">
@@ -233,28 +268,32 @@
 
           <div class="col-lg-3 col-md-6">
             <div class="stats-item text-center w-100 h-100">
-              <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
+              <span data-purecounter-start="0" data-purecounter-end="300" data-purecounter-duration="1"
+                class="purecounter"></span>
               <p>Khách hàng</p>
             </div>
           </div><!-- End Stats Item -->
 
           <div class="col-lg-3 col-md-6">
             <div class="stats-item text-center w-100 h-100">
-              <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
+              <span data-purecounter-start="0" data-purecounter-end="20" data-purecounter-duration="1"
+                class="purecounter"></span>
               <p>Dự án</p>
             </div>
           </div><!-- End Stats Item -->
 
           <div class="col-lg-3 col-md-6">
             <div class="stats-item text-center w-100 h-100">
-              <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1" class="purecounter"></span>
+              <span data-purecounter-start="0" data-purecounter-end="140" data-purecounter-duration="1"
+                class="purecounter"></span>
               <p>Thời gian hỗ trợ</p>
             </div>
           </div><!-- End Stats Item -->
 
           <div class="col-lg-3 col-md-6">
             <div class="stats-item text-center w-100 h-100">
-              <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1" class="purecounter"></span>
+              <span data-purecounter-start="0" data-purecounter-end="20" data-purecounter-duration="1"
+                class="purecounter"></span>
               <p>Nhân viên</p>
             </div>
           </div><!-- End Stats Item -->
@@ -288,16 +327,9 @@
 
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-lunch">
-              <h4>Trưa</h4>
+              <h4>Món chính</h4>
             </a>
           </li><!-- End tab nav item -->
-
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-dinner">
-              <h4>Tối</h4>
-            </a>
-          </li><!-- End tab nav item -->
-
         </ul>
 
         <div class="tab-content" data-aos="fade-up" data-aos-delay="300">
@@ -312,68 +344,70 @@
             <div class="row gy-5">
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-1.png" class="glightbox"><img src="assets/img/menu/menu-item-1.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Đậu sốt cà chua</h4>
+                <a href="assets\img\menu\min_Spring_Roll.png" class="glightbox"><img src="assets\img\menu\min_Spring_Roll.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Chả giò cuộn nhỏ</h4>
                 <p class="ingredients">
-                  HI hi ha ha ho ho
                 </p>
                 <p class="price">
-                  25.000đ
+                  39.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-2.png" class="glightbox"><img src="assets/img/menu/menu-item-2.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Món cuộn</h4>
+                <a href="assets/img/menu/menu-item-2.png" class="glightbox"><img src="assets/img/menu/menu-item-2.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Món cuộn tôm</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
                 </p>
                 <p class="price">
-                  20.000đ
+                  49.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-3.png" class="glightbox"><img src="assets/img/menu/menu-item-3.png" class="menu-img img-fluid" alt=""></a>
+                <a href="assets/img/menu/menu-item-3.png" class="glightbox"><img src="assets/img/menu/menu-item-3.png"
+                    class="menu-img img-fluid" alt=""></a>
                 <h4>Salad Cua</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
                 </p>
                 <p class="price">
-                  20.000đ
+                  59.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-4.png" class="glightbox"><img src="assets/img/menu/menu-item-4.png" class="menu-img img-fluid" alt=""></a>
+                <a href="assets/img/menu/menu-item-4.png" class="glightbox"><img src="assets/img/menu/menu-item-4.png"
+                    class="menu-img img-fluid" alt=""></a>
                 <h4>Salad hỗn hợp</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  20.000đ
+                  39.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-5.png" class="glightbox"><img src="assets/img/menu/menu-item-5.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Thịt bò sốt</h4>
+                <a href="assets\img\menu\spring-rolls-vegetables-rice-paper-162106332-removebg-preview.png" class="glightbox"><img src="assets\img\menu\spring-rolls-vegetables-rice-paper-162106332-removebg-preview.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Chả giò rau và bánh tráng</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
                 </p>
                 <p class="price">
-                  40.000đ
+                  49.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-6.png" class="glightbox"><img src="assets/img/menu/menu-item-6.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Nem cuốn</h4>
+                <a href="assets/img/menu/menu-item-6.png" class="glightbox"><img src="assets/img/menu/menu-item-6.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Nem nướng</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  35.000đ
+                  59.000đ
                 </p>
               </div><!-- Menu Item -->
 
@@ -390,68 +424,74 @@
             <div class="row gy-5">
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-1.png" class="glightbox"><img src="assets/img/menu/menu-item-1.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Khô</h4>
+                <a href="assets\img\menu\chicken_fried_rice.png" class="glightbox"><img src="assets\img\menu\chicken_fried_rice.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Cơm chiên gà</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  20.000đ
+                  29.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-2.png" class="glightbox"><img src="assets/img/menu/menu-item-2.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Aut Luia</h4>
+                <a href="assets\img\menu\plain_chow_mein.png" class="glightbox"><img src="assets\img\menu\plain_chow_mein.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Mì xào</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  30.000đ
+                  29.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-3.png" class="glightbox"><img src="assets/img/menu/menu-item-3.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Est Eligendi</h4>
+                <a href="assets\img\menu\Salt_Pepper_chicken.png" class="glightbox"><img src="assets\img\menu\Salt_Pepper_chicken.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Gà chiên giòn</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  25.000đ
+                  39.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-4.png" class="glightbox"><img src="assets/img/menu/menu-item-4.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Eos Luibusdam</h4>
+                <a href="assets\img\menu\Sesame_Prawn_Toast.png" class="glightbox"><img src="assets\img\menu\Sesame_Prawn_Toast.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Bánh mì nướng tôm mè</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  40.000đ
+                  39.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-5.png" class="glightbox"><img src="assets/img/menu/menu-item-5.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Eos Luibusdam</h4>
+                <a href="assets\img\menu\vietnamese-spring-rolls-vegetables-rice-noodles-shrimps-vietnamese-spring-rolls-160724629-removebg-preview.png" class="glightbox"><img src="assets\img\menu\vietnamese-spring-rolls-vegetables-rice-noodles-shrimps-vietnamese-spring-rolls-160724629-removebg-preview.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Cơm cuộn kiểu Hàn Quốc</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  50.000đ
+                  49.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-6.png" class="glightbox"><img src="assets/img/menu/menu-item-6.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Laboriosam Direva</h4>
+                <a href="assets\img\menu\black-plate-sushi-other-food-generative-ai-270052362-removebg-preview.png" class="glightbox"><img src="assets\img\menu\black-plate-sushi-other-food-generative-ai-270052362-removebg-preview.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Cơm nắm kiểu Nhật(sushi)</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  30.000đ
+                  79.000đ
                 </p>
               </div><!-- Menu Item -->
 
@@ -462,160 +502,86 @@
 
             <div class="tab-header text-center">
               <p>Thực đơn</p>
-              <h3>Trưa</h3>
+              <h3>Món chính</h3>
             </div>
 
             <div class="row gy-5">
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-1.png" class="glightbox"><img src="assets/img/menu/menu-item-1.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Magnam Tiste</h4>
+                <a href="assets/img/menu/menu-item-1.png" class="glightbox"><img src="assets/img/menu/menu-item-1.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Đậu phụ sốt</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  100.000đ
+                  49.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-2.png" class="glightbox"><img src="assets/img/menu/menu-item-2.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Aut Luia</h4>
+                <a href="assets\img\menu\vietnamese-salad-beef-soy-sauce-crispy-spring-rolls-rice-noodles-fresh-herbs-vegetables-closeup-vertical-top-286331051-removebg-preview.png" class="glightbox"><img src="assets\img\menu\vietnamese-salad-beef-soy-sauce-crispy-spring-rolls-rice-noodles-fresh-herbs-vegetables-closeup-vertical-top-286331051-removebg-preview.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Bún chả nướng</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  50.000đ
+                  59.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-3.png" class="glightbox"><img src="assets/img/menu/menu-item-3.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Est Eligendi</h4>
+                <a href="assets\img\menu\black-plate-topped-meat-rice-vegetables-bowl-sauce-food-variety-meats-sauces-345999738-removebg-preview.png" class="glightbox"><img src="assets\img\menu\black-plate-topped-meat-rice-vegetables-bowl-sauce-food-variety-meats-sauces-345999738-removebg-preview.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Cơm đặc biệt</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  70.000đ
+                  79.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-4.png" class="glightbox"><img src="assets/img/menu/menu-item-4.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Eos Luibusdam</h4>
+                <a href="assets\img\menu\bowl-vegetable-stir-fry-rice-broccoli-peppers-beansprouts-healthy-meal-option-s-easy-to-make-perfect-lunch-359697863-removebg-preview.bak.png" class="glightbox"><img src="assets\img\menu\bowl-vegetable-stir-fry-rice-broccoli-peppers-beansprouts-healthy-meal-option-s-easy-to-make-perfect-lunch-359697863-removebg-preview.bak.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Cơm ngũ vị</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  80.000đ
+                  49.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-5.png" class="glightbox"><img src="assets/img/menu/menu-item-5.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Eos Luibusdam</h4>
+                <a href="assets/img/menu/menu-item-5.png" class="glightbox"><img src="assets/img/menu/menu-item-5.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Bò nướng sốt vang</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  40.000đ
+                  59.000đ
                 </p>
               </div><!-- Menu Item -->
 
               <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-6.png" class="glightbox"><img src="assets/img/menu/menu-item-6.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Laboriosam Direva</h4>
+                <a href="assets\img\menu\spicy-dish-chinese-food-hot-illustration-sichuan-shanghai-cantonese-dumplings-noodles-rice-298909101.png" class="glightbox"><img src="assets\img\menu\spicy-dish-chinese-food-hot-illustration-sichuan-shanghai-cantonese-dumplings-noodles-rice-298909101.png"
+                    class="menu-img img-fluid" alt=""></a>
+                <h4>Lẩu đặc biệt</h4>
                 <p class="ingredients">
-                  hi hi ha ha ho ho
+                  
                 </p>
                 <p class="price">
-                  50.000đ
+                  399.000đ
                 </p>
               </div><!-- Menu Item -->
 
             </div>
           </div><!-- End Lunch Menu Content -->
-
-          <div class="tab-pane fade" id="menu-dinner">
-
-            <div class="tab-header text-center">
-              <p>Thực đơn</p>
-              <h3>Tối</h3>
-            </div>
-
-            <div class="row gy-5">
-
-              <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-1.png" class="glightbox"><img src="assets/img/menu/menu-item-1.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Magnam Tiste</h4>
-                <p class="ingredients">
-                  hi hi ha ha ho ho
-                </p>
-                <p class="price">
-                  60.000đ
-                </p>
-              </div><!-- Menu Item -->
-
-              <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-2.png" class="glightbox"><img src="assets/img/menu/menu-item-2.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Aut Luia</h4>
-                <p class="ingredients">
-                  hi hi ha ha ho ho
-                </p>
-                <p class="price">
-                  70.000đ
-                </p>
-              </div><!-- Menu Item -->
-
-              <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-3.png" class="glightbox"><img src="assets/img/menu/menu-item-3.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Est Eligendi</h4>
-                <p class="ingredients">
-                  hi hi ha ha ho ho
-                </p>
-                <p class="price">
-                  40.000đ
-                </p>
-              </div><!-- Menu Item -->
-
-              <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-4.png" class="glightbox"><img src="assets/img/menu/menu-item-4.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Eos Luibusdam</h4>
-                <p class="ingredients">
-                  hi hi ha ha ho ho
-                </p>
-                <p class="price">
-                  30.000đ
-                </p>
-              </div><!-- Menu Item -->
-
-              <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-5.png" class="glightbox"><img src="assets/img/menu/menu-item-5.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Eos Luibusdam</h4>
-                <p class="ingredients">
-                  hi hi ha ha ho ho
-                </p>
-                <p class="price">
-                  20.000đ
-                </p>
-              </div><!-- Menu Item -->
-
-              <div class="col-lg-4 menu-item">
-                <a href="assets/img/menu/menu-item-6.png" class="glightbox"><img src="assets/img/menu/menu-item-6.png" class="menu-img img-fluid" alt=""></a>
-                <h4>Laboriosam Direva</h4>
-                <p class="ingredients">
-                  hi hi ha ha ho ho
-                </p>
-                <p class="price">
-                  40.000đ
-                </p>
-              </div><!-- Menu Item -->
-
-            </div>
-          </div><!-- End Dinner Menu Content -->
-
         </div>
-
       </div>
     </section><!-- End Menu Section -->
 
@@ -638,13 +604,14 @@
                     <div class="testimonial-content">
                       <p>
                         <i class="bi bi-quote quote-icon-left"></i>
-                        
+                        Tôi rất ấn tượng với chất lượng dịch vụ của Zap Food. Món ăn đều tươi ngon, giao hàng đúng giờ và nhân viên rất thân thiện. Đây là địa điểm lý tưởng để tổ chức những bữa tiệc nhỏ cho gia đình tôi.
                         <i class="bi bi-quote quote-icon-right"></i>
                       </p>
-                      <h3>Saul Goodman</h3>
-                      <h4>Ceo &amp; Founder</h4>
+                      <h3>Nguyễn Quốc Bảo</h3>
+                      <h4>Giám đốc công ty</h4>
                       <div class="stars">
-                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                          class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                       </div>
                     </div>
                   </div>
@@ -662,13 +629,14 @@
                     <div class="testimonial-content">
                       <p>
                         <i class="bi bi-quote quote-icon-left"></i>
-                        Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
+                        Zap Food là địa điểm yêu thích của tôi và đồng nghiệp mỗi khi cần đặt đồ ăn cho buổi họp. Thực đơn phong phú, giá cả phải chăng và đặc biệt là món chính của nhà hàng luôn mang đến hương vị đúng chuẩn Việt Nam.
                         <i class="bi bi-quote quote-icon-right"></i>
                       </p>
-                      <h3>Sara Wilsson</h3>
-                      <h4>Designer</h4>
+                      <h3>Trần Thị Mai</h3>
+                      <h4>Nhà thiết kế</h4>
                       <div class="stars">
-                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                          class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                       </div>
                     </div>
                   </div>
@@ -686,13 +654,14 @@
                     <div class="testimonial-content">
                       <p>
                         <i class="bi bi-quote quote-icon-left"></i>
-                        Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
+                        Tôi là khách hàng thân thiết của Zap Food từ ngày đầu khai trương. Sự đa dạng trong thực đơn và những món đặc sản luôn khiến tôi hài lòng. Đặc biệt là dịch vụ đặt bàn online rất tiện lợi và nhân viên luôn nhiệt tình hỗ trợ.
                         <i class="bi bi-quote quote-icon-right"></i>
                       </p>
-                      <h3>Jena Karlis</h3>
-                      <h4>Store Owner</h4>
+                      <h3>Lê Thanh Hà</h3>
+                      <h4>Chủ cửa hàng</h4>
                       <div class="stars">
-                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                          class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                       </div>
                     </div>
                   </div>
@@ -710,18 +679,19 @@
                     <div class="testimonial-content">
                       <p>
                         <i class="bi bi-quote quote-icon-left"></i>
-                        Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
+                        Tôi thường xuyên tổ chức các buổi gặp mặt đối tác tại Zap Food. Không gian thoáng đãng, món ăn ngon và phong cách phục vụ chuyên nghiệp luôn mang lại ấn tượng tốt cho khách của tôi. Đây thực sự là địa điểm đáng để quay lại nhiều lần.
                         <i class="bi bi-quote quote-icon-right"></i>
                       </p>
-                      <h3>John Larson</h3>
-                      <h4>Entrepreneur</h4>
+                      <h3>Phạm Văn Đức</h3>
+                      <h4>Doanh nhân</h4>
                       <div class="stars">
-                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                          class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                       </div>
                     </div>
                   </div>
                   <div class="col-lg-2 text-center">
-                    <img src="assets/img/testimonials/testimonials-4.jpg" class="img-fluid testimonial-img" alt="">
+                    <img src="assets/img/testimonials/testimonials-5.jpg" class="img-fluid testimonial-img" alt="">
                   </div>
                 </div>
               </div>
@@ -739,34 +709,37 @@
       <div class="container-fluid" data-aos="fade-up">
 
         <div class="section-header">
-          <h2>Events</h2>
-          <p>Share <span>Your Moments</span> In Our Restaurant</p>
+          <h2>Sự Kiện</h2>
+          <p>Chia sẻ <span>Khoảnh Khắc</span> Tại Nhà Hàng Chúng Tôi</p>
         </div>
 
         <div class="slides-3 swiper" data-aos="fade-up" data-aos-delay="100">
           <div class="swiper-wrapper">
 
-            <div class="swiper-slide event-item d-flex flex-column justify-content-end" style="background-image: url(assets/img/events-1.jpg)">
-              <h3>Custom Parties</h3>
-              <div class="price align-self-start">$99</div>
+            <div class="swiper-slide event-item d-flex flex-column justify-content-end"
+              style="background-image: url(assets/img/events-1.jpg)">
+              <h3>Tiệc Theo Yêu Cầu</h3>
+              <div class="price align-self-start">2.299.000đ</div>
               <p class="description">
-                Quo corporis voluptas ea ad. Consectetur inventore sapiente ipsum voluptas eos omnis facere. Enim facilis veritatis id est rem repudiandae nulla expedita quas.
+                Zap Food cung cấp dịch vụ tổ chức tiệc theo yêu cầu riêng của khách hàng, từ không gian trang trí đến thực đơn đặc biệt. Hãy để chúng tôi biến mọi ý tưởng của bạn thành hiện thực.
               </p>
             </div><!-- End Event item -->
 
-            <div class="swiper-slide event-item d-flex flex-column justify-content-end" style="background-image: url(assets/img/events-2.jpg)">
-              <h3>Private Parties</h3>
-              <div class="price align-self-start">$289</div>
+            <div class="swiper-slide event-item d-flex flex-column justify-content-end"
+              style="background-image: url(assets/img/events-2.jpg)">
+              <h3>Tiệc Riêng Tư</h3>
+              <div class="price align-self-start">6.900.000đ</div>
               <p class="description">
-                In delectus sint qui et enim. Et ab repudiandae inventore quaerat doloribus. Facere nemo vero est ut dolores ea assumenda et. Delectus saepe accusamus aspernatur.
+                Không gian riêng tư sang trọng dành cho những bữa tiệc đặc biệt, các cuộc họp kinh doanh hay những dịp kỷ niệm quan trọng. Chúng tôi đảm bảo sự riêng tư và phục vụ chuyên nghiệp.
               </p>
             </div><!-- End Event item -->
 
-            <div class="swiper-slide event-item d-flex flex-column justify-content-end" style="background-image: url(assets/img/events-3.jpg)">
-              <h3>Birthday Parties</h3>
-              <div class="price align-self-start">$499</div>
+            <div class="swiper-slide event-item d-flex flex-column justify-content-end"
+              style="background-image: url(assets/img/events-3.jpg)">
+              <h3>Tiệc Sinh Nhật</h3>
+              <div class="price align-self-start">3.499.000đ</div>
               <p class="description">
-                Laborum aperiam atque omnis minus omnis est qui assumenda quos. Quis id sit quibusdam. Esse quisquam ducimus officia ipsum ut quibusdam maxime. Non enim perspiciatis.
+                Hãy để Zap Food biến ngày sinh nhật của bạn trở nên đặc biệt với các gói tiệc sinh nhật đa dạng, từ trang trí bánh đến thực đơn phong phú và không gian ấm cúng.
               </p>
             </div><!-- End Event item -->
 
@@ -782,8 +755,8 @@
       <div class="container" data-aos="fade-up">
 
         <div class="section-header">
-          <h2>Chefs</h2>
-          <p>Our <span>Proffesional</span> Chefs</p>
+          <h2>Đầu Bếp</h2>
+          <p>Đội ngũ <span>Đầu Bếp</span> Chuyên Nghiệp Của Chúng Tôi</p>
         </div>
 
         <div class="row gy-4">
@@ -800,9 +773,9 @@
                 </div>
               </div>
               <div class="member-info">
-                <h4>Walter White</h4>
-                <span>Master Chef</span>
-                <p>Velit aut quia fugit et et. Dolorum ea voluptate vel tempore tenetur ipsa quae aut. Ipsum exercitationem iure minima enim corporis et voluptate.</p>
+                <h4>Nguyễn Văn Minh</h4>
+                <span>Bếp Trưởng</span>
+                <p>Với hơn 15 năm kinh nghiệm trong ngành ẩm thực, Chef Minh đã từng làm việc tại nhiều nhà hàng nổi tiếng và mang đến Zap Food những công thức độc đáo kết hợp giữa ẩm thực truyền thống và hiện đại.</p>
               </div>
             </div>
           </div><!-- End Chefs Member -->
@@ -819,9 +792,9 @@
                 </div>
               </div>
               <div class="member-info">
-                <h4>Sarah Jhonson</h4>
-                <span>Patissier</span>
-                <p>Quo esse repellendus quia id. Est eum et accusantium pariatur fugit nihil minima suscipit corporis. Voluptate sed quas reiciendis animi neque sapiente.</p>
+                <h4>Trần Thị Hương</h4>
+                <span>Bếp Trưởng Bánh Ngọt</span>
+                <p>Chef Hương chuyên về các món bánh ngọt tinh tế và sáng tạo. Cô đã tốt nghiệp trường ẩm thực Le Cordon Bleu và mang đến Zap Food những món tráng miệng tuyệt hảo với phong cách độc đáo.</p>
               </div>
             </div>
           </div><!-- End Chefs Member -->
@@ -838,9 +811,9 @@
                 </div>
               </div>
               <div class="member-info">
-                <h4>William Anderson</h4>
-                <span>Cook</span>
-                <p>Vero omnis enim consequatur. Voluptas consectetur unde qui molestiae deserunt. Voluptates enim aut architecto porro aspernatur molestiae modi.</p>
+                <h4>Phạm Hoàng Nam</h4>
+                <span>Đầu Bếp</span>
+                <p>Chef Nam là chuyên gia về các món hải sản và ẩm thực đường phố Việt Nam. Anh đam mê khám phá những nguyên liệu địa phương và luôn mang đến những món ăn ngon, đậm đà hương vị truyền thống.</p>
               </div>
             </div>
           </div><!-- End Chefs Member -->
@@ -850,70 +823,83 @@
       </div>
     </section><!-- End Chefs Section -->
 
-    <!-- ======= Book A Table Section ======= -->
+    <!-- ======= Phần Đặt Bàn ======= -->
     <section id="book-a-table" class="book-a-table">
       <div class="container" data-aos="fade-up">
 
         <div class="section-header">
-          <h2>Book A Table</h2>
-          <p>Book <span>Your Stay</span> With Us</p>
+          <h2>Đặt bàn ngay</h2>
+          <p>Đặt <span>Chỗ Của Bạn</span> Với Chúng Tôi</p> <!-- Changed -->
         </div>
 
         <div class="row g-0">
 
-          <div class="col-lg-4 reservation-img" style="background-image: url(assets/img/reservation.jpg);" data-aos="zoom-out" data-aos-delay="200"></div>
+          <div class="col-lg-4 reservation-img" style="background-image: url(assets/img/reservation.jpg);"
+            data-aos="zoom-out" data-aos-delay="200"></div>
 
           <div class="col-lg-8 d-flex align-items-center reservation-form-bg">
-            <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+            <!--            <form action="" method="post" role="form" class="php-email-form" data-aos="fade-up"-->
+            <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up"
+              data-aos-delay="100">
               <div class="row gy-4">
                 <div class="col-lg-4 col-md-6">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars">
+                  <input type="text" name="name" class="form-control" id="customer-name" placeholder="Tên của bạn"
+                    data-rule="minlen:4" data-msg="Vui lòng nhập ít nhất 4 ký tự"> <!-- Changed -->
                   <div class="validate"></div>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email">
+                  <input type="email" class="form-control" name="email" id="customer-email" placeholder="Email của bạn" 
+                    data-rule="email" data-msg="Vui lòng nhập email hợp lệ"> <!-- Changed -->
                   <div class="validate"></div>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                  <input type="text" class="form-control" name="phone" id="phone" placeholder="Your Phone" data-rule="minlen:4" data-msg="Please enter at least 4 chars">
+                  <input type="text" class="form-control" name="phone" id="phone" placeholder="Số điện thoại của bạn" 
+                    data-rule="minlen:4" data-msg="Vui lòng nhập ít nhất 4 ký tự"> <!-- Changed -->
                   <div class="validate"></div>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                  <input type="text" name="date" class="form-control" id="date" placeholder="Date" data-rule="minlen:4" data-msg="Please enter at least 4 chars">
+                  <!-- <input type="text" name="date" class="form-control" id="date" placeholder="Date" data-rule="minlen:4" -->
+                    <!-- data-msg="Please enter at least 4 chars"> -->
+                  <input type="text" name="date" class="form-control" id="date" placeholder="Ngày"> <!-- Changed -->
                   <div class="validate"></div>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                  <input type="text" class="form-control" name="time" id="time" placeholder="Time" data-rule="minlen:4" data-msg="Please enter at least 4 chars">
+                  <input type="text" class="form-control" name="time" id="time" placeholder="Giờ" data-rule="minlen:4" 
+                    data-msg="Vui lòng nhập ít nhất 4 ký tự"> <!-- Changed -->
                   <div class="validate"></div>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                  <input type="number" class="form-control" name="people" id="people" placeholder="# of people" data-rule="minlen:1" data-msg="Please enter at least 1 chars">
+                  <input type="number" class="form-control" name="people" id="people" placeholder="Số người" 
+                    data-rule="minlen:1" data-msg="Vui lòng nhập ít nhất 1 ký tự"> <!-- Changed -->
                   <div class="validate"></div>
                 </div>
               </div>
               <div class="form-group mt-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Message"></textarea>
+                <textarea class="form-control" name="message" rows="5" placeholder="Lời nhắn"></textarea> <!-- Changed -->
                 <div class="validate"></div>
               </div>
               <div class="form-check form-group ps-0">
-                <input id="privacy-policy" type="checkbox" name="privacy" value="accept" required>
-                <label class="form-check-label ps-1" for="privacy-policy">
-                  Chấp nhận các <a href="terms.html">điều khoản dịch vụ</a> và <a href="privacy.html">chính sách bảo mật</a> của chúng tôi.
+                <!-- Đổi id và for nếu cần thiết, nhưng giữ nguyên name="privacy" và value="accept" -->
+                <input id="privacy-policy-vi" type="checkbox" name="privacy" value="accept" required> <!-- Changed id -->
+                <label class="form-check-label ps-1" for="privacy-policy-vi"> <!-- Changed for -->
+                  Chấp nhận các <a href="terms.html">điều khoản dịch vụ</a> và <a href="privacy.html">chính sách bảo
+                    mật</a> của chúng tôi.
                 </label>
               </div>
               <div class="mb-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Yêu cầu đặt bàn cảu bạn đã được gửi. Chúng tôi sẽ gọi lại hoặc gửi Email để xác nhận việc đặt chỗ của bạn. Xin cảm ơn!</div>
+                <div class="loading">Đang tải</div> <!-- Changed -->
+                <div class="error-message"></div> <!-- Thường được điền bởi JS, có thể để trống hoặc thêm thông báo lỗi mặc định tiếng Việt nếu muốn -->
+                <div class="sent-message">Yêu cầu đặt bàn của bạn đã được gửi. Chúng tôi sẽ gọi lại hoặc gửi Email để
+                  xác nhận việc đặt chỗ của bạn. Xin cảm ơn!</div>
               </div>
               <div class="text-center"><button type="submit">Đặt bàn</button></div>
             </form>
-          </div><!-- End Reservation Form -->
+          </div><!-- Kết thúc Form Đặt Bàn -->
 
         </div>
 
       </div>
-    </section><!-- End Book A Table Section -->
+    </section><!-- Kết thúc Phần Đặt Bàn -->
 
     <!-- ======= Gallery Section ======= -->
     <section id="gallery" class="gallery section-bg">
@@ -926,14 +912,30 @@
 
         <div class="gallery-slider swiper">
           <div class="swiper-wrapper align-items-center">
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-1.jpg"><img src="assets/img/gallery/gallery-1.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-2.jpg"><img src="assets/img/gallery/gallery-2.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-3.jpg"><img src="assets/img/gallery/gallery-3.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-4.jpg"><img src="assets/img/gallery/gallery-4.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-5.jpg"><img src="assets/img/gallery/gallery-5.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-6.jpg"><img src="assets/img/gallery/gallery-6.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-7.jpg"><img src="assets/img/gallery/gallery-7.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-8.jpg"><img src="assets/img/gallery/gallery-8.jpg" class="img-fluid" alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                href="assets/img/gallery/gallery-1.jpg"><img src="assets/img/gallery/gallery-1.jpg" class="img-fluid"
+                  alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                href="assets/img/gallery/gallery-2.jpg"><img src="assets/img/gallery/gallery-2.jpg" class="img-fluid"
+                  alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                href="assets/img/gallery/gallery-3.jpg"><img src="assets/img/gallery/gallery-3.jpg" class="img-fluid"
+                  alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                href="assets/img/gallery/gallery-4.jpg"><img src="assets/img/gallery/gallery-4.jpg" class="img-fluid"
+                  alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                href="assets/img/gallery/gallery-5.jpg"><img src="assets/img/gallery/gallery-5.jpg" class="img-fluid"
+                  alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                href="assets/img/gallery/gallery-6.jpg"><img src="assets/img/gallery/gallery-6.jpg" class="img-fluid"
+                  alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                href="assets/img/gallery/gallery-7.jpg"><img src="assets/img/gallery/gallery-7.jpg" class="img-fluid"
+                  alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                href="assets/img/gallery/gallery-8.jpg"><img src="assets/img/gallery/gallery-8.jpg" class="img-fluid"
+                  alt=""></a></div>
           </div>
           <div class="swiper-pagination"></div>
         </div>
@@ -952,7 +954,9 @@
 
         <div class="mb-3">
           <!-- <iframe width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" frameborder="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d119178.52496255969!2d105.67919087902102!3d21.019521761080647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313454a1080e72f3%3A0xb08bae358d43e397!2zTmFtIFThu6sgTGnDqm0sIEjDoCBO4buZaSwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1718096953832!5m2!1svi!2s"></iframe> -->
-          <iframe width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" frameborder="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3492.9143672265027!2d105.77219845584922!3d21.015012643464406!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313454aa0fed56c7%3A0x1ba275bf03d4c1a9!2zVHJ1bmcgdMOibSB0aMawxqFuZyBt4bqhaSBUaGUgR2FyZGVu!5e0!3m2!1svi!2s!4v1719567588781!5m2!1svi!2s"></iframe>
+          <iframe width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" frameborder="0"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3492.9143672265027!2d105.77219845584922!3d21.015012643464406!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313454aa0fed56c7%3A0x1ba275bf03d4c1a9!2zVHJ1bmcgdMOibSB0aMawxqFuZyBt4bqhaSBUaGUgR2FyZGVu!5e0!3m2!1svi!2s!4v1719567588781!5m2!1svi!2s"></iframe>
           <!-- <iframe style="border:0; width: 100%; height: 350px;" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621" frameborder="0" allowfullscreen></iframe> -->
         </div><!-- End Google Maps -->
 
@@ -1004,7 +1008,8 @@
         </div>
 
         <!-- <form action="forms/contact.php" method="post" role="form" class="php-email-form p-3 p-md-4" data-recaptcha-site-key="6LfB_PUpAAAAAH1dqzLpQslayH2u8qQx1EbWxHuR"> -->
-        <form id="form_id" action="forms/contact.php" method="post" role="form" class="php-email-form" data-recaptcha-site-key="6LfB_PUpAAAAAH1dqzLpQslayH2u8qQx1EbWxHuR">
+        <form id="form_id" action="forms/contact.php" method="post" role="form" class="php-email-form"
+          data-recaptcha-site-key="6LfB_PUpAAAAAH1dqzLpQslayH2u8qQx1EbWxHuR">
           <div class="row">
             <div class="col-xl-6 form-group">
               <input type="text" name="name" class="form-control" id="name" placeholder="Họ và tên" required>
@@ -1022,7 +1027,8 @@
           <div class="form-check form-group ps-0">
             <input id="privacy-policy" type="checkbox" name="privacy" value="accept" required>
             <label class="form-check-label ps-1" for="privacy-policy">
-              Chấp nhận các <a href="terms.html">điều khoản dịch vụ</a> và <a href="privacy.html">chính sách bảo mật</a> của chúng tôi.
+              Chấp nhận các <a href="terms.html">điều khoản dịch vụ</a> và <a href="privacy.html">chính sách bảo mật</a>
+              của chúng tôi.
             </label>
           </div>
           <!-- <form id="form_id" method="post" action="your_action.php"> -->
@@ -1030,7 +1036,7 @@
             <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
             <input type="hidden" name="action" value="submit">
           </div>
-            <!-- Các trường form khác của bạn ở đây -->
+          <!-- Các trường form khác của bạn ở đây -->
           <!-- </form> -->
           <div class="my-3">
             <div class="loading">Đang tải</div>
@@ -1039,7 +1045,6 @@
           </div>
           <div class="text-center"><button type="submit">Gửi</button></div>
         </form><!--End Contact Form -->
-
       </div>
     </section><!-- End Contact Section -->
 
@@ -1059,7 +1064,6 @@
               Nam Từ Liêm<br>
             </p>
           </div>
-
         </div>
 
         <div class="col-lg-3 col-md-6 footer-links d-flex">
@@ -1080,7 +1084,7 @@
             <p>
               <strong>Thứ hai - Thứ bảy:</strong><br>
               11:00 AM - 23:00 PM<br>
-              <strong>Chủ nhật:</strong><br> 
+              <strong>Chủ nhật:</strong><br>
               Đóng cửa<br>
             </p>
           </div>
@@ -1088,11 +1092,29 @@
 
         <div class="col-lg-3 col-md-6 footer-links">
           <h4>Theo dõi chúng tôi tại</h4>
-          <div class="social-links d-flex">
+          <div class="social-links d-flex mb-3">
             <a href="" class="twitter"><i class="bi bi-twitter"></i></a>
-            <a href="https://www.facebook.com/profile.php?id=100016413974771" class="facebook"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=100016413974771" class="facebook"><i
+                class="bi bi-facebook"></i></a>
             <a href="https://www.instagram.com/g.zappu/" class="instagram"><i class="bi bi-instagram"></i></a>
             <!-- <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a> -->
+          </div>
+          
+          <!-- Nhúng fanpage Facebook Iframe -->
+          <div class="facebook-container">
+            <div class="fb-page" 
+              data-href="https://www.facebook.com/JollibeeVietnam" 
+              data-tabs="timeline" 
+              data-width="280" 
+              data-height="300" 
+              data-small-header="false" 
+              data-adapt-container-width="true" 
+              data-hide-cover="false" 
+              data-show-facepile="true">
+              <blockquote cite="https://www.facebook.com/JollibeeVietnam" class="fb-xfbml-parse-ignore">
+                <a href="https://www.facebook.com/JollibeeVietnam">Jollibee Vietnam</a>
+              </blockquote>
+            </div>
           </div>
         </div>
 
@@ -1101,18 +1123,17 @@
 
     <div class="container">
       <div class="copyright">
-        &copy; Copyright <strong><span>ZZap</span></strong>. All Rights Reserved
+        © Bản quyền <strong><span>Zap</span></strong>. Mọi quyền được bảo lưu <!-- Changed -->
       </div>
       <div class="credits">
-     
-        Designed by <a href="">Zappu</a>
+        Thiết kế bởi <a href="">Zappu</a> <!-- Changed -->
       </div>
     </div>
 
   </footer><!-- End Footer -->
-  <!-- End Footer -->
 
-  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
   <div id="preloader"></div>
 
@@ -1126,6 +1147,25 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <!-- Date form -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    flatpickr("#date", {
+      dateFormat: "Y-m-d",
+      locale: "vn" // Đặt ngôn ngữ tiếng Việt
+    });
+  </script>
+  <!-- Time -->
+  <script>
+    flatpickr("#time", {
+      enableTime: true,
+      noCalendar: true,
+      dateFormat: "H:i",
+      time_24hr: true,
+      locale: "vn" // Đặt ngôn ngữ tiếng Việt
+    });
+  </script>
 
 </body>
 
