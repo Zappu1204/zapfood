@@ -2,6 +2,8 @@ version: '3'
 
 services:
   webserver:
+    container_name: zapfood_webserver
+    image: giapcn/zapfood:v1.0
     build:
       context: .
       dockerfile: Dockerfile

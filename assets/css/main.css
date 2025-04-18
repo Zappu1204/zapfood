@@ -26,6 +26,7 @@
   --dark-card-box-shadow: 0px 0 30px rgba(0, 0, 0, 0.3);
   --dark-call-us-bg: #292929;
   --dark-info-item-bg: #292929;
+  --dark-placeholder: #888888;
 }
 
 /*--------------------------------------------------------------
@@ -47,7 +48,7 @@ a {
 }
 
 a:hover {
-  color: #ec2727;
+  color: rgba(0, 132, 255, 0.8);
   text-decoration: none;
 }
 
@@ -1416,7 +1417,7 @@ body.dark-mode .contact .php-email-form textarea {
 }
 
 .book-a-table .php-email-form button[type=submit]:hover {
-  background: #ec2727;
+  background: rgba(0, 132, 255, 0.8);
 }
 
 @keyframes animate-loading {
@@ -1427,6 +1428,43 @@ body.dark-mode .contact .php-email-form textarea {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* Form Placeholders in Dark Mode */
+body.dark-mode .book-a-table .php-email-form input::placeholder,
+body.dark-mode .book-a-table .php-email-form textarea::placeholder,
+body.dark-mode .contact .php-email-form input::placeholder,
+body.dark-mode .contact .php-email-form textarea::placeholder {
+  color: var(--dark-placeholder);
+  opacity: 1;
+}
+
+body.dark-mode .book-a-table .php-email-form input:focus::placeholder,
+body.dark-mode .book-a-table .php-email-form textarea:focus::placeholder,
+body.dark-mode .contact .php-email-form input:focus::placeholder,
+body.dark-mode .contact .php-email-form textarea:focus::placeholder {
+  opacity: 0.7;
+}
+
+/* Fix loading background in dark mode */
+body.dark-mode .book-a-table .php-email-form .loading,
+body.dark-mode .contact .php-email-form .loading {
+  background: var(--dark-card-bg);
+  color: var(--dark-text);
+}
+
+/* Fix checkbox text color in dark mode */
+body.dark-mode .form-check-label {
+  color: var(--dark-text);
+}
+
+/* Fix links in form in dark mode */
+body.dark-mode .form-check-label a {
+  color: var(--color-primary);
+}
+
+body.dark-mode .form-check-label a:hover {
+  text-decoration: underline;
 }
 
 /*--------------------------------------------------------------
@@ -1628,7 +1666,7 @@ body.dark-mode .contact .info-item .social-links a:hover {
 }
 
 .contact .php-email-form button[type=submit]:hover {
-  background: #ec2727;
+  background: rgba(0, 132, 255, 0.8);
 }
 
 @keyframes animate-loading {
@@ -1996,4 +2034,39 @@ body.dark-mode .nav-tabs .nav-link:focus,
 body.dark-mode .nav-tabs .nav-link:hover {
   border-color: var(--dark-text-secondary);
   isolation: isolate;
+}
+
+/* Checkbox styling cho phần chấp nhận điều khoản */
+#privacy-policy:checked,
+#privacy-policy-vi:checked {
+  accent-color: #008cff; 
+}
+
+/* Tăng kích thước của checkbox cho dễ nhìn */
+#privacy-policy,
+#privacy-policy-vi {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Hiệu ứng hover cho checkbox */
+#privacy-policy:hover,
+#privacy-policy-vi:hover {
+  box-shadow: 0 0 4px rgba(0, 140, 255, 0.5);
+}
+
+/* Fix alignment */
+.form-check {
+  display: flex;
+  align-items: center;
+}
+
+/* Dark mode cho checkbox */
+body.dark-mode #privacy-policy:checked,
+body.dark-mode #privacy-policy-vi:checked {
+  accent-color: #008cff;
+  filter: brightness(1.2);
 }

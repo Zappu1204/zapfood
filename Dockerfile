@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.2-apache-bullseye
 
 # Cài đặt các extension PHP cần thiết
 RUN apt-get update && apt-get install -y \
