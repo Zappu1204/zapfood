@@ -33,6 +33,9 @@
   <!-- Date Form -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
+  <!-- Light/Dark Mode Button CSS -->
+  <link href="assets/css/style_button_light_dark.css" rel="stylesheet">
+
   <style>
     .form-check {
       display: flex;
@@ -127,6 +130,34 @@
       </nav><!-- .navbar -->
 
       <a class="btn-book-a-table" href="#book-a-table">Đặt bàn</a>
+      
+      <!-- Theme Switch Button -->
+      <div class="theme-mode-switch me-3 ms-3">
+        <label class="theme-switch">
+          <input type="checkbox" class="theme-switch__checkbox" id="theme-toggle">
+          <div class="theme-switch__container">
+            <div class="theme-switch__clouds"></div>
+            <div class="theme-switch__stars-container">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 55" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M135.831 3.00688C135.055 3.85027 134.111 4.29946 133 4.35447C134.111 4.40947 135.055 4.85867 135.831 5.71123C136.607 6.55462 136.996 7.56303 136.996 8.72727C136.996 7.95722 137.172 7.25134 137.525 6.59129C137.886 5.93124 138.372 5.39954 138.98 5.00535C139.598 4.60199 140.268 4.39114 141 4.35447C139.88 4.2903 138.936 3.85027 138.16 3.00688C137.384 2.16348 136.996 1.16425 136.996 0C136.996 1.16425 136.607 2.16348 135.831 3.00688Z"
+                  fill="currentColor"></path>
+                <!-- Phần path còn lại của svg stars -->
+              </svg>
+            </div>
+            <div class="theme-switch__circle-container">
+              <div class="theme-switch__sun-moon-container">
+                <div class="theme-switch__moon">
+                  <div class="theme-switch__spot"></div>
+                  <div class="theme-switch__spot"></div>
+                  <div class="theme-switch__spot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </label>
+      </div>
+      
       <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
       <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
 
@@ -313,8 +344,8 @@
       </video>
       <div class="video-overlay"></div>
       <div class="video-content" data-aos="zoom-in">
-        <h2 class="neon-text">Trải Nghiệm Ẩm Thực Độc Đáo</h2>
-        <p class="neon-text-small">Nơi hương vị truyền thống gặp gỡ sáng tạo hiện đại</p>
+        <h2 class="normal-title">Trải Nghiệm Ẩm Thực Độc Đáo</h2>
+        <p class="normal-text">Nơi hương vị truyền thống gặp gỡ sáng tạo hiện đại</p>
         <a href="#menu" class="video-btn">Khám Phá Thực Đơn</a>
       </div>
     </section><!-- End Video Background Section -->

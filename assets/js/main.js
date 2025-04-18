@@ -239,4 +239,32 @@ document.addEventListener('DOMContentLoaded', () => {
     aos_init();
   });
 
+  /**
+   * Theme Switcher 
+   * Light/Dark Mode functionality
+   */
+  const themeToggle = document.getElementById('theme-toggle');
+  
+  // Kiểm tra theme được lưu trước đó
+  const savedTheme = localStorage.getItem('theme');
+  
+  // Áp dụng theme đã lưu hoặc mặc định
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    themeToggle.checked = true;
+  }
+  
+  // Xử lý sự kiện khi toggle button được nhấn
+  themeToggle.addEventListener('change', function() {
+    if (this.checked) {
+      // Chuyển sang Dark Mode
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      // Chuyển sang Light Mode
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
 });
