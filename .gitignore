@@ -1,0 +1,10 @@
+/.idea
+
+data
+node_modules
+*.log
+*.env
+*.env.local
+*.env.development
+
+Run.md
