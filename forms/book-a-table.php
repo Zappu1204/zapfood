@@ -9,10 +9,10 @@ require '../PHPMailer/src/PHPMailer.php';
 require '../PHPMailer/src/SMTP.php';
 
 // Cấu hình kết nối cơ sở dữ liệu với PDO
-$host     = '172.200.234.169';
+$host     = '127.0.0.1';
 $dbname   = 'zapfood';
 $db_user  = 'zap';
-$db_pass  = 'Meobeo123@';
+$db_pass  = 'Zapfood@123';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $db_user, $db_pass, [

@@ -21,8 +21,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: zapfood
-      MYSQL_USER: zapfood_user
-      MYSQL_PASSWORD: zapfood_password
+      MYSQL_USER: zap
+      MYSQL_PASSWORD: Zapfood@123
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
