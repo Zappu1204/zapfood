@@ -1,0 +1,39 @@
+# version: '3'
+
+services:
+  webserver:
+    container_name: zapfood_webserver
+#    image: giapcn/zapfood:v1.0
+    build:
+      context: .
+      dockerfile: Dockerfile.s390x
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+    restart: always
+    networks:
+      - zapfood-network
+
+  # Database service (không bắt buộc, thêm nếu cần)
+  db:
+    image: ibmcom/mysql-s390x:8.0.25
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: zapfood
+      MYSQL_USER: zap
+      MYSQL_PASSWORD: Zapfood@123
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: always
+    networks:
+      - zapfood-network
+
+networks:
+  zapfood-network:
+    driver: bridge
+
+volumes:
+  mysql_data:

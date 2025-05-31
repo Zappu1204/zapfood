@@ -1,0 +1,29 @@
+FROM --platform=linux/s390x s390x/php:8.2-apache
+
+# Cài đặt các extension PHP cần thiết
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    zip \
+    unzip \
+    && docker-php-ext-install zip pdo pdo_mysql
+
+# Kích hoạt mod_rewrite cho Apache
+RUN a2enmod rewrite
+
+# Cài đặt Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Thiết lập thư mục làm việc
+WORKDIR /var/www/html
+
+# Sao chép mã nguồn của ứng dụng
+COPY . /var/www/html/
+
+# Đặt quyền cho các thư mục
+RUN chown -R www-data:www-data /var/www/html
+
+# Mở cổng 80
+EXPOSE 80
+
+# Khởi động Apache
+CMD ["apache2-foreground"]
