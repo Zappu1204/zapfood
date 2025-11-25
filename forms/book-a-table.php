@@ -65,12 +65,12 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 // Validate phone number (basic Vietnamese phone format)
-if (!preg_match('/^[0-9]{10,11}$/', $phone)) {
-    sendError("Vui lòng nhập số điện thoại hợp lệ.");
+if (!preg_match('/^[0-9+\s\-()]{10,15}$/', $phone)) {
+    sendError("Vui lòng nhập số điện thoại hợp lệ (10-15 ký tự).");
 }
 
-// Validate privacy acceptance
-if ($privacy !== 'accept') {
+// Validate privacy acceptance (more flexible)
+if (empty($privacy) || ($privacy !== 'accept' && $privacy !== '1' && $privacy !== 'on')) {
     sendError("Bạn cần chấp nhận các điều khoản dịch vụ và chính sách bảo mật.");
 }
 
@@ -123,8 +123,10 @@ try {
     // Primary recipient (customer who made the booking)
     $mail->addAddress($email, $name);
 
-    // Add restaurant manager as CC to receive notification
-    $mail->addCC(SMTP_TO_EMAIL, SMTP_TO_NAME);
+    // Add restaurant manager as CC if configured
+    if (defined('SMTP_TO_EMAIL') && !empty(SMTP_TO_EMAIL)) {
+        $mail->addCC(SMTP_TO_EMAIL, SMTP_TO_NAME);
+    }
 
     // Email content
     $mail->isHTML(true);

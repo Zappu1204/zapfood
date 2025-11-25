@@ -194,12 +194,16 @@
       if (bookTableForm) {
         let isSubmitting = false; // Flag to prevent double submission
         
+        // Prevent all form submission events
         bookTableForm.addEventListener('submit', function (event) {
           event.preventDefault();
+          event.stopPropagation();
+          event.stopImmediatePropagation();
           
           // Prevent double submission
           if (isSubmitting) {
-            return;
+            console.log('Already submitting, ignoring...');
+            return false;
           }
           
           const submitButton = this.querySelector('button[type="submit"]');
@@ -216,10 +220,17 @@
           successDiv.style.display = 'none';
           submitButton.disabled = true;
           
+          console.log('Starting reCAPTCHA verification...');
+          
           grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'book_table' }).then(function (token) {
+            console.log('reCAPTCHA token received, submitting form...');
+            
             // Prepare form data
             const formData = new FormData(bookTableForm);
             formData.append('g-recaptcha-response', token);
+            
+            // Log form data for debugging
+            console.log('Form data:', Object.fromEntries(formData));
             
             // Send AJAX request
             fetch('forms/book-a-table.php', {
@@ -227,24 +238,28 @@
               body: formData
             })
             .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.text();
+              // Read response text first
+              return response.text().then(text => ({
+                ok: response.ok,
+                status: response.status,
+                text: text
+              }));
             })
-            .then(data => {
+            .then(result => {
               loadingDiv.style.display = 'none';
               isSubmitting = false; // Reset flag
               
-              if (data.trim() === 'OK') {
+              if (result.ok && result.text.trim() === 'OK') {
                 successDiv.style.display = 'block';
                 bookTableForm.reset();
                 setTimeout(() => {
                   successDiv.style.display = 'none';
                 }, 5000);
               } else {
-                errorDiv.textContent = data;
+                // Display error message from server or generic message
+                errorDiv.textContent = result.text || 'Đã có lỗi xảy ra. Vui lòng thử lại.';
                 errorDiv.style.display = 'block';
+                console.error('Server response:', result.status, result.text);
               }
               submitButton.disabled = false;
             })
@@ -262,7 +277,10 @@
             errorDiv.style.display = 'block';
             submitButton.disabled = false;
           });
-        });
+          
+          // Always return false to prevent default submission
+          return false;
+        }, true); // Use capture phase to ensure this runs first
       }
     });
   </script> 
@@ -1067,39 +1085,37 @@
             data-aos="zoom-out" data-aos-delay="200"></div>
 
           <div class="col-lg-8 d-flex align-items-center reservation-form-bg">
-            <!--            <form action="" method="post" role="form" class="php-email-form" data-aos="fade-up"-->
-            <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up"
+            <!-- Form submit via AJAX only, no action attribute -->
+            <form method="post" role="form" class="php-email-form" data-aos="fade-up"
               data-aos-delay="100">
               <div class="row gy-4">
                 <div class="col-lg-4 col-md-6">
                   <input type="text" name="name" class="form-control" id="customer-name" placeholder="Tên của bạn"
-                    data-rule="minlen:4" data-msg="Vui lòng nhập ít nhất 4 ký tự"> <!-- Changed -->
+                    required data-rule="minlen:4" data-msg="Vui lòng nhập ít nhất 4 ký tự">
                   <div class="validate"></div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <input type="email" class="form-control" name="email" id="customer-email" placeholder="Email của bạn" 
-                    data-rule="email" data-msg="Vui lòng nhập email hợp lệ"> <!-- Changed -->
+                    required data-rule="email" data-msg="Vui lòng nhập email hợp lệ">
                   <div class="validate"></div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <input type="text" class="form-control" name="phone" id="phone" placeholder="Số điện thoại của bạn" 
-                    data-rule="minlen:4" data-msg="Vui lòng nhập ít nhất 4 ký tự"> <!-- Changed -->
+                    required data-rule="minlen:10" data-msg="Vui lòng nhập ít nhất 10 ký tự">
                   <div class="validate"></div>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                  <!-- <input type="text" name="date" class="form-control" id="date" placeholder="Date" data-rule="minlen:4" -->
-                    <!-- data-msg="Please enter at least 4 chars"> -->
-                  <input type="text" name="date" class="form-control" id="date" placeholder="Ngày"> <!-- Changed -->
+                  <input type="text" name="date" class="form-control" id="date" placeholder="Ngày" required>
                   <div class="validate"></div>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                  <input type="text" class="form-control" name="time" id="time" placeholder="Giờ" data-rule="minlen:4" 
-                    data-msg="Vui lòng nhập ít nhất 4 ký tự"> <!-- Changed -->
+                  <input type="text" class="form-control" name="time" id="time" placeholder="Giờ" 
+                    required data-rule="minlen:4" data-msg="Vui lòng nhập ít nhất 4 ký tự">
                   <div class="validate"></div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <input type="number" class="form-control" name="people" id="people" placeholder="Số người" 
-                    data-rule="minlen:1" data-msg="Vui lòng nhập ít nhất 1 ký tự"> <!-- Changed -->
+                    required min="1" data-rule="minlen:1" data-msg="Vui lòng nhập ít nhất 1 người">
                   <div class="validate"></div>
                 </div>
               </div>
