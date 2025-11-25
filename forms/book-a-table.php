@@ -120,13 +120,11 @@ try {
     // Sender information
     $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
 
-    // Primary recipient (restaurant manager)
-    $mail->addAddress(SMTP_TO_EMAIL, SMTP_TO_NAME);
+    // Primary recipient (customer who made the booking)
+    $mail->addAddress($email, $name);
 
-    // Add customer as BCC
-    if (!empty($email)) {
-        $mail->addBCC($email, $name);
-    }
+    // Add restaurant manager as CC to receive notification
+    $mail->addCC(SMTP_TO_EMAIL, SMTP_TO_NAME);
 
     // Email content
     $mail->isHTML(true);

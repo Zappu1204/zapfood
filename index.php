@@ -192,12 +192,23 @@
       // Handle book a table form with AJAX
       const bookTableForm = document.querySelector('#book-a-table form');
       if (bookTableForm) {
+        let isSubmitting = false; // Flag to prevent double submission
+        
         bookTableForm.addEventListener('submit', function (event) {
           event.preventDefault();
+          
+          // Prevent double submission
+          if (isSubmitting) {
+            return;
+          }
+          
           const submitButton = this.querySelector('button[type="submit"]');
           const loadingDiv = this.querySelector('.loading');
           const errorDiv = this.querySelector('.error-message');
           const successDiv = this.querySelector('.sent-message');
+          
+          // Set submitting flag
+          isSubmitting = true;
           
           // Reset messages
           loadingDiv.style.display = 'block';
@@ -223,6 +234,8 @@
             })
             .then(data => {
               loadingDiv.style.display = 'none';
+              isSubmitting = false; // Reset flag
+              
               if (data.trim() === 'OK') {
                 successDiv.style.display = 'block';
                 bookTableForm.reset();
@@ -237,12 +250,14 @@
             })
             .catch(error => {
               loadingDiv.style.display = 'none';
+              isSubmitting = false; // Reset flag
               errorDiv.textContent = 'Đã có lỗi xảy ra. Vui lòng thử lại.';
               errorDiv.style.display = 'block';
               submitButton.disabled = false;
             });
           }).catch(function() {
             loadingDiv.style.display = 'none';
+            isSubmitting = false; // Reset flag
             errorDiv.textContent = 'Xác minh reCAPTCHA thất bại. Vui lòng thử lại.';
             errorDiv.style.display = 'block';
             submitButton.disabled = false;
