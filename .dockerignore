@@ -1,0 +1,58 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Dependencies
+/vendor
+/node_modules
+
+# IDE
+.vscode
+.idea
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+error.log
+access.log
+
+# Temporary
+*.tmp
+*.temp
+*.cache
+
+# Documentation (optional - bỏ comment nếu không muốn include vào image)
+# README.md
+# SETUP.md
+# QUICKSTART.md
+# DOCKER-DEPLOYMENT.md
+# Run.md
+
+# Docker files (không cần trong container)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Database data
+/data
+mysql_data
+
+# Composer lock (sẽ được tạo lại trong build)
+# composer.lock
+
+# Assets development (nếu có)
+/assets/scss

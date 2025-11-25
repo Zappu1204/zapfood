@@ -1,29 +1,49 @@
 <?php
-// Bao gồm các tệp cần thiết của PHPMailer
+/**
+ * Book a Table Form Handler
+ * Handles table booking submissions with reCAPTCHA v3 verification
+ */
+
+// Load configuration
+require_once __DIR__ . '/../config.php';
+
+// Load PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
 
-require '../PHPMailer/src/Exception.php';
-require '../PHPMailer/src/PHPMailer.php';
-require '../PHPMailer/src/SMTP.php';
-
-// Cấu hình kết nối cơ sở dữ liệu với PDO
-$host     = '127.0.0.1';
-$dbname   = 'zapfood';
-$db_user  = 'zap';
-$db_pass  = 'Zapfood@123';
-
+// Initialize database connection and create table if needed
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $db_user, $db_pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-    ]);
+    $pdo = getDbConnection();
+    
+    // Check if 'bookings' table exists
+    $stmt = $pdo->query("SHOW TABLES LIKE 'bookings'");
+    if ($stmt->rowCount() == 0) {
+        // Create table if it doesn't exist
+        $sqlCreateTable = "CREATE TABLE bookings (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            phone VARCHAR(20),
+            date DATE NOT NULL,
+            time TIME NOT NULL,
+            people INT NOT NULL,
+            message TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX idx_date_time (date, time),
+            INDEX idx_email (email)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+        $pdo->exec($sqlCreateTable);
+    }
 } catch (PDOException $e) {
-    die("Kết nối cơ sở dữ liệu thất bại: " . $e->getMessage());
+    sendError("Database initialization failed");
 }
 
-// Nhận dữ liệu từ form thông qua phương thức POST
+// Validate POST request
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    sendError("Invalid request method", 405);
+}
+
+// Get and sanitize form data
 $name    = isset($_POST['name']) ? trim($_POST['name']) : '';
 $email   = isset($_POST['email']) ? trim($_POST['email']) : '';
 $phone   = isset($_POST['phone']) ? trim($_POST['phone']) : '';
@@ -32,106 +52,159 @@ $time    = isset($_POST['time']) ? trim($_POST['time']) : '';
 $people  = isset($_POST['people']) ? intval($_POST['people']) : 0;
 $message = isset($_POST['message']) ? trim($_POST['message']) : '';
 $privacy = isset($_POST['privacy']) ? trim($_POST['privacy']) : '';
+$recaptchaToken = isset($_POST['g-recaptcha-response']) ? trim($_POST['g-recaptcha-response']) : '';
 
-// Kiểm tra và làm sạch dữ liệu
+// Validate required fields
 if (empty($name) || empty($email) || empty($phone) || empty($date) || empty($time) || $people <= 0) {
-    die("Vui lòng điền đầy đủ các thông tin bắt buộc.");
+    sendError("Vui lòng điền đầy đủ các thông tin bắt buộc.");
 }
 
-// Thêm kiểm tra định dạng email cơ bản phía server (nên làm)
+// Validate email format
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-     die("Vui lòng nhập địa chỉ email hợp lệ.");
+    sendError("Vui lòng nhập địa chỉ email hợp lệ.");
 }
 
+// Validate phone number (basic Vietnamese phone format)
+if (!preg_match('/^[0-9]{10,11}$/', $phone)) {
+    sendError("Vui lòng nhập số điện thoại hợp lệ.");
+}
 
+// Validate privacy acceptance
 if ($privacy !== 'accept') {
-    die("Bạn cần chấp nhận các điều khoản dịch vụ và chính sách bảo mật.");
+    sendError("Bạn cần chấp nhận các điều khoản dịch vụ và chính sách bảo mật.");
 }
 
-// Lưu trữ dữ liệu vào cơ sở dữ liệu
+// Verify reCAPTCHA v3
+$recaptchaResult = verifyRecaptcha($recaptchaToken, 'book_table');
+if (!$recaptchaResult['success']) {
+    error_log("reCAPTCHA verification failed: " . $recaptchaResult['message'] . " (Score: " . $recaptchaResult['score'] . ")");
+    sendError("Xác minh bảo mật không thành công. Vui lòng thử lại.");
+}
+
+
+// Save booking to database
 $sql = "INSERT INTO bookings (name, email, phone, date, time, people, message) 
         VALUES (:name, :email, :phone, :date, :time, :people, :message)";
-$stmt = $pdo->prepare($sql);
-
-$stmt->bindParam(':name', $name);
-$stmt->bindParam(':email', $email);
-$stmt->bindParam(':phone', $phone);
-$stmt->bindParam(':date', $date);
-$stmt->bindParam(':time', $time);
-$stmt->bindParam(':people', $people, PDO::PARAM_INT);
-$stmt->bindParam(':message', $message);
 
 try {
-    $stmt->execute();
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':name' => $name,
+        ':email' => $email,
+        ':phone' => $phone,
+        ':date' => $date,
+        ':time' => $time,
+        ':people' => $people,
+        ':message' => $message
+    ]);
 } catch (PDOException $e) {
-    die("Lỗi lưu trữ dữ liệu: " . $e->getMessage());
+    error_log("Database insert failed: " . $e->getMessage());
+    sendError("Không thể lưu thông tin đặt bàn. Vui lòng thử lại.");
 }
 
-// Gửi email thông báo đến chủ nhà hàng
+
+// Send email notification
 $mail = new PHPMailer(true);
 
 try {
-    // Cấu hình SMTP
+    // SMTP Configuration
     $mail->isSMTP();
-    $mail->Host       = 'smtp.gmail.com'; // Máy chủ SMTP của Gmail
+    $mail->Host       = SMTP_HOST;
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'win10pro.2004+zapfood@gmail.com'; // Địa chỉ email của bạn
-    $mail->Password   = 'umgi wqlq fkpf rvay'; // Mật khẩu ứng dụng hoặc mật khẩu email
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Hoặc PHPMailer::ENCRYPTION_SMTPS
-    $mail->Port       = 587;                      // Hoặc 465 cho SMTPS
-    $mail->CharSet    = 'UTF-8';                  // Đảm bảo tiếng Việt hiển thị đúng
+    $mail->Username   = SMTP_USERNAME;
+    $mail->Password   = SMTP_PASSWORD;
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = SMTP_PORT;
+    $mail->CharSet    = 'UTF-8';
 
-    // Thông tin người gửi (Nhà hàng)
-    $mail->setFrom('win10pro.2004+zapfood@gmail.com', 'ZapFood'); // Email và tên hiển thị của người gửi
+    // Sender information
+    $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
 
-    // Thông tin người nhận chính (Chủ nhà hàng / Quản lý)
-    $mail->addAddress('win10pro.2004+zapfood@gmail.com', 'Zap'); // Email và tên người nhận chính
+    // Primary recipient (restaurant manager)
+    $mail->addAddress(SMTP_TO_EMAIL, SMTP_TO_NAME);
 
-    // ----- THAY ĐỔI Ở ĐÂY -----
-    // Thêm người gửi form (khách hàng) làm người nhận BCC
-    // Kiểm tra $email không rỗng để tránh lỗi nếu có vấn đề khi lấy dữ liệu
+    // Add customer as BCC
     if (!empty($email)) {
-        $mail->addBCC($email, $name); // Email và tên của khách hàng
+        $mail->addBCC($email, $name);
     }
-    // -------------------------
 
-    // Nội dung email
-    $mail->isHTML(true); // Đặt định dạng email là HTML
-    $mail->Subject = 'Thông báo đặt bàn mới từ website ZapFood'; // Tiêu đề email
+    // Email content
+    $mail->isHTML(true);
+    $mail->Subject = 'Thông báo đặt bàn mới từ website ZapFood';
     $mail->Body    = "
-        <h2>Có một yêu cầu đặt bàn mới:</h2>
-        <p><strong>Tên khách hàng:</strong> " . htmlspecialchars($name) . "</p>
-        <p><strong>Email:</strong> " . htmlspecialchars($email) . "</p>
-        <p><strong>Số điện thoại:</strong> " . htmlspecialchars($phone) . "</p>
-        <p><strong>Ngày đặt:</strong> " . htmlspecialchars($date) . "</p>
-        <p><strong>Thời gian:</strong> " . htmlspecialchars($time) . "</p>
-        <p><strong>Số người:</strong> " . htmlspecialchars($people) . "</p>
-        <p><strong>Lời nhắn:</strong><br>" . nl2br(htmlspecialchars($message)) . "</p>
-        <hr>
-        <p><em>Email này được gửi tự động từ hệ thống đặt bàn của ZapFood.</em></p>
+        <html>
+        <head>
+            <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { background-color: #ce1212; color: white; padding: 20px; text-align: center; }
+                .content { padding: 20px; background-color: #f9f9f9; }
+                .info-row { padding: 10px 0; border-bottom: 1px solid #ddd; }
+                .label { font-weight: bold; color: #ce1212; }
+                .footer { padding: 20px; text-align: center; font-size: 12px; color: #666; }
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>
+                    <h2>Yêu Cầu Đặt Bàn Mới</h2>
+                </div>
+                <div class='content'>
+                    <div class='info-row'>
+                        <span class='label'>Tên khách hàng:</span> " . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . "
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Email:</span> " . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . "
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Số điện thoại:</span> " . htmlspecialchars($phone, ENT_QUOTES, 'UTF-8') . "
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Ngày đặt:</span> " . htmlspecialchars($date, ENT_QUOTES, 'UTF-8') . "
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Thời gian:</span> " . htmlspecialchars($time, ENT_QUOTES, 'UTF-8') . "
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Số người:</span> " . htmlspecialchars($people, ENT_QUOTES, 'UTF-8') . "
+                    </div>
+                    <div class='info-row'>
+                        <span class='label'>Lời nhắn:</span><br>" . nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8')) . "
+                    </div>
+                </div>
+                <div class='footer'>
+                    <p><em>Email này được gửi tự động từ hệ thống đặt bàn của ZapFood.</em></p>
+                </div>
+            </div>
+        </body>
+        </html>
     ";
-    // Nội dung thay thế cho các trình đọc email không hỗ trợ HTML
+    
+    // Plain text alternative
     $mail->AltBody = "
-        Có một yêu cầu đặt bàn mới:\n
-        Tên khách hàng: " . $name . "\n" .
-        "Email: " . $email . "\n" .
-        "Số điện thoại: " . $phone . "\n" .
-        "Ngày đặt: " . $date . "\n" .
-        "Thời gian: " . $time . "\n" .
-        "Số người: " . $people . "\n" .
-        "Lời nhắn:\n" . $message . "\n\n" .
-        "Email này được gửi tự động từ hệ thống đặt bàn của ZapFood.";
+        YÊU CẦU ĐẶT BÀN MỚI
+        
+        Tên khách hàng: {$name}
+        Email: {$email}
+        Số điện thoại: {$phone}
+        Ngày đặt: {$date}
+        Thời gian: {$time}
+        Số người: {$people}
+        Lời nhắn:
+        {$message}
+        
+        ---
+        Email này được gửi tự động từ hệ thống đặt bàn của ZapFood.
+    ";
 
     $mail->send();
-    // Trả về 'OK' hoặc một thông báo thành công dạng JSON cho form xử lý
-    echo 'OK';
-    exit;
+    sendSuccess('OK');
 
 } catch (Exception $e) {
-    // Ghi log lỗi chi tiết thay vì hiển thị trực tiếp cho người dùng
-    error_log("Lỗi gửi email PHPMailer: {$mail->ErrorInfo}. Exception: {$e->getMessage()}");
-    // Trả về thông báo lỗi chung chung
-    die("Rất tiếc, đã có lỗi xảy ra khi gửi yêu cầu đặt bàn của bạn. Vui lòng thử lại hoặc liên hệ trực tiếp với chúng tôi.");
+    // Log detailed error
+    error_log("Email sending failed: {$mail->ErrorInfo}. Exception: {$e->getMessage()}");
+    
+    // Still send success to user since booking was saved
+    // But log the email failure for admin review
+    sendSuccess('OK');
 }
-
-?>
