@@ -66,6 +66,58 @@
       border-radius: 5px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
+
+    /* Form message styles */
+    .php-email-form .loading,
+    .php-email-form .error-message,
+    .php-email-form .sent-message {
+      display: none;
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 4px;
+    }
+
+    .php-email-form .loading {
+      background: #fff;
+      text-align: center;
+      padding: 15px;
+      color: #ce1212;
+    }
+
+    .php-email-form .loading:before {
+      content: "";
+      display: inline-block;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      margin: 0 10px -6px 0;
+      border: 3px solid #ce1212;
+      border-top-color: #fff;
+      animation: animate-loading 1s linear infinite;
+    }
+
+    .php-email-form .error-message {
+      display: none;
+      color: #fff;
+      background: #df1529;
+      text-align: center;
+    }
+
+    .php-email-form .sent-message {
+      display: none;
+      color: #fff;
+      background: #059652;
+      text-align: center;
+    }
+
+    @keyframes animate-loading {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 
   <!-- Spam protection with Google reCaptcha -->
@@ -76,34 +128,123 @@
   <script src="https://www.google.com/recaptcha/api.js?render=<?php echo RECAPTCHA_SITE_KEY; ?>"></script>
   <script>
     grecaptcha.ready(function () {
-      // Handle contact form
+      // Handle contact form with AJAX
       const contactForm = document.getElementById('form_id');
       if (contactForm) {
         contactForm.addEventListener('submit', function (event) {
           event.preventDefault();
+          const submitButton = this.querySelector('button[type="submit"]');
+          const loadingDiv = this.querySelector('.loading');
+          const errorDiv = this.querySelector('.error-message');
+          const successDiv = this.querySelector('.sent-message');
+          
+          // Reset messages
+          loadingDiv.style.display = 'block';
+          errorDiv.style.display = 'none';
+          successDiv.style.display = 'none';
+          submitButton.disabled = true;
+          
           grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'contact' }).then(function (token) {
-            document.getElementById('g-recaptcha-response').value = token;
-            contactForm.submit();
+            // Prepare form data
+            const formData = new FormData(contactForm);
+            formData.append('g-recaptcha-response', token);
+            
+            // Send AJAX request
+            fetch('forms/contact.php', {
+              method: 'POST',
+              body: formData
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.text();
+            })
+            .then(data => {
+              loadingDiv.style.display = 'none';
+              if (data.trim() === 'OK') {
+                successDiv.style.display = 'block';
+                contactForm.reset();
+                setTimeout(() => {
+                  successDiv.style.display = 'none';
+                }, 5000);
+              } else {
+                errorDiv.textContent = data;
+                errorDiv.style.display = 'block';
+              }
+              submitButton.disabled = false;
+            })
+            .catch(error => {
+              loadingDiv.style.display = 'none';
+              errorDiv.textContent = 'Đã có lỗi xảy ra. Vui lòng thử lại.';
+              errorDiv.style.display = 'block';
+              submitButton.disabled = false;
+            });
+          }).catch(function() {
+            loadingDiv.style.display = 'none';
+            errorDiv.textContent = 'Xác minh reCAPTCHA thất bại. Vui lòng thử lại.';
+            errorDiv.style.display = 'block';
+            submitButton.disabled = false;
           });
         });
       }
 
-      // Handle book a table form
+      // Handle book a table form with AJAX
       const bookTableForm = document.querySelector('#book-a-table form');
       if (bookTableForm) {
         bookTableForm.addEventListener('submit', function (event) {
           event.preventDefault();
           const submitButton = this.querySelector('button[type="submit"]');
+          const loadingDiv = this.querySelector('.loading');
+          const errorDiv = this.querySelector('.error-message');
+          const successDiv = this.querySelector('.sent-message');
+          
+          // Reset messages
+          loadingDiv.style.display = 'block';
+          errorDiv.style.display = 'none';
+          successDiv.style.display = 'none';
           submitButton.disabled = true;
           
           grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'book_table' }).then(function (token) {
-            const tokenInput = document.createElement('input');
-            tokenInput.type = 'hidden';
-            tokenInput.name = 'g-recaptcha-response';
-            tokenInput.value = token;
-            bookTableForm.appendChild(tokenInput);
-            bookTableForm.submit();
+            // Prepare form data
+            const formData = new FormData(bookTableForm);
+            formData.append('g-recaptcha-response', token);
+            
+            // Send AJAX request
+            fetch('forms/book-a-table.php', {
+              method: 'POST',
+              body: formData
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.text();
+            })
+            .then(data => {
+              loadingDiv.style.display = 'none';
+              if (data.trim() === 'OK') {
+                successDiv.style.display = 'block';
+                bookTableForm.reset();
+                setTimeout(() => {
+                  successDiv.style.display = 'none';
+                }, 5000);
+              } else {
+                errorDiv.textContent = data;
+                errorDiv.style.display = 'block';
+              }
+              submitButton.disabled = false;
+            })
+            .catch(error => {
+              loadingDiv.style.display = 'none';
+              errorDiv.textContent = 'Đã có lỗi xảy ra. Vui lòng thử lại.';
+              errorDiv.style.display = 'block';
+              submitButton.disabled = false;
+            });
           }).catch(function() {
+            loadingDiv.style.display = 'none';
+            errorDiv.textContent = 'Xác minh reCAPTCHA thất bại. Vui lòng thử lại.';
+            errorDiv.style.display = 'block';
             submitButton.disabled = false;
           });
         });
